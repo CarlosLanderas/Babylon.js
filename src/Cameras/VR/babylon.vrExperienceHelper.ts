@@ -111,6 +111,15 @@ module BABYLON {
         private _currentMeshSelected: Nullable<AbstractMesh>;
         public onNewMeshSelected = new Observable<AbstractMesh>();
         private _circleEase: CircleEase;
+        private _rayPickingInfo : Nullable<PickingInfo> = null;
+
+        /**
+         * Gets last ray cast hit picking info
+         */
+
+        public get rayPickingInfo() : Nullable<PickingInfo> {
+            return this.rayPickingInfo;
+        }
 
         /**
          * Observable raised before camera teleportation        
@@ -1417,6 +1426,7 @@ module BABYLON {
                             this._isActionableMesh = false;
                         }
                         try {
+                            this._rayPickingInfo = hit;
                             this.onNewMeshSelected.notifyObservers(this._currentMeshSelected);
                         }
                         catch (err) {
@@ -1427,6 +1437,7 @@ module BABYLON {
                         if (this._currentMeshSelected) {
                             this.onSelectedMeshUnselected.notifyObservers(this._currentMeshSelected);
                         }
+                        this._rayPickingInfo = null;
                         this._currentMeshSelected = null;
                         this.changeGazeColor(new Color3(0.7, 0.7, 0.7));
                         this.changeLaserColor(new Color3(0.7, 0.7, 0.7));
